@@ -71,6 +71,9 @@ def loopTree(sample, isMC):
     histList['event_nPV'] = rt.TH1F('event_nPV' ,'#vertices',70,0,70)
     histList['event_nPV'].Sumw2()
 
+    histList['event_nPV_wei'] = rt.TH1F('event_nPV_wei' ,'#vertices',70,0,70)
+    histList['event_nPV_wei'].Sumw2()
+
     histList['event_rho'] = rt.TH1F('event_rho' ,'#rho',100,0,50)
     histList['event_rho'].Sumw2()
     
@@ -250,6 +253,7 @@ def loopTree(sample, isMC):
     xTitle['el_sc_phi'] = 'Probe #phi_{sc}' 
     xTitle['tag_sc_phi'] = 'Tag #phi_{sc}' 
     xTitle['event_nPV'] = '#vertices' 
+    xTitle['event_nPV_wei'] = '#vertices' 
     xTitle['event_rho'] = '#rho' 
 
     if(isMC):
@@ -558,6 +562,8 @@ def loopTree(sample, isMC):
             histList['el_sc_phi'].Fill(el_sc_phi,totWeight)
 
             histList['event_nPV'].Fill(event_nPV)
+
+            histList['event_nPV_wei'].Fill(event_nPV,totWeight)
 
             histList['event_rho'].Fill(event_rho,totWeight)
             
