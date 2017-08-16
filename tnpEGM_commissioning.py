@@ -230,6 +230,22 @@ def loopTree(sample, isMC):
         xTitle['el_sc_phi_%s' %(reg)] = 'Probe #phi_{sc} (%s)' %(reg) 
         xTitle['tag_sc_phi_%s' %(reg)] = 'Tag #phi_{sc} (%s)' %(reg) 
 
+        
+    histList['pair_mass_EB_EB'] = rt.TH1F('pair_mass_EB_EB','Di-lepton invariant mass',60,60,120)
+    histList['pair_mass_EB_EB'].Sumw2()
+
+    histList['pair_mass_EB_EE'] = rt.TH1F('pair_mass_EB_EE','Di-lepton invariant mass',60,60,120)
+    histList['pair_mass_EB_EE'].Sumw2()
+
+    histList['pair_mass_EE_EE'] = rt.TH1F('pair_mass_EE_EE','Di-lepton invariant mass',60,60,120)
+    histList['pair_mass_EE_EE'].Sumw2()
+
+
+    xTitle['pair_mass_EB_EB'] = 'M_{ee} [GeV] (EB-EB)' 
+    xTitle['pair_mass_EB_EE'] = 'M_{ee} [GeV] (EB-EE)' 
+    xTitle['pair_mass_EE_EE'] = 'M_{ee} [GeV] (EE-EE)' 
+
+
     xTitle['el_sc_eta'] = 'Probe #eta_{sc}' 
     xTitle['el_sc_phi'] = 'Probe #phi_{sc}' 
     xTitle['tag_sc_phi'] = 'Tag #phi_{sc}' 
@@ -239,9 +255,8 @@ def loopTree(sample, isMC):
     if(isMC):
         friendTree = tree.GetFriend(friendTreeName)
 
-    #fnvtx = rt.TFile("histo_nvtxratio.root","READ");
-    #fnvtx = rt.TFile("histo_nvtxratio_2017B.root","READ");
     fnvtx = rt.TFile("histo_nvtxratio_runB.root","READ");
+    #fnvtx = rt.TFile("histo_nvtxratio_runC.root","READ");
     hnvtx = fnvtx.Get("hratio");
 
     for ev in range(tree.GetEntries()):
@@ -458,15 +473,15 @@ def loopTree(sample, isMC):
 
         if isMC==1:
             #totWeight        = friendTree.totWeight
-            totWeight        = tree.totWeight
+            #totWeight        = tree.totWeight
             ######################################
-            #maxbins =  hnvtx.GetNbinsX()
-            #nvtxbin = hnvtx.FindBin(event_nPV)
-            #weight = hnvtx.GetBinContent(nvtxbin)
-            #if(maxbins<nvtxbin):
-            #    weight = hnvtx.GetBinContent(maxbins)
+            maxbins =  hnvtx.GetNbinsX()
+            nvtxbin = hnvtx.FindBin(event_nPV)
+            weight = hnvtx.GetBinContent(nvtxbin)
+            if(maxbins<nvtxbin):
+                weight = hnvtx.GetBinContent(maxbins)
 
-            #totWeight  = weight
+            totWeight  = weight
             #########################################
 #        print 'totweight is ',totWeight
 
@@ -521,7 +536,23 @@ def loopTree(sample, isMC):
 
         if(el_sc_abseta > 1.479):
             reg = 'EE'
+
+        
+
+        combreg = 'EB_EB'
+
+        if(tag_sc_abseta < 1.479):
+            combreg = 'EB_EB'
+            if(el_sc_abseta > 1.479): 
+                combreg = 'EB_EE'
+
+        if(tag_sc_abseta > 1.479):
+            combreg = 'EB_EE'   ##### i dont write EE_EB since this combination should go in one hist
+            if(el_sc_abseta > 1.479): 
+                combreg = 'EE_EE'
             
+
+
         if(forIDetc):    
             histList['el_sc_eta'].Fill(el_sc_eta,totWeight)
             histList['el_sc_phi'].Fill(el_sc_phi,totWeight)
@@ -542,6 +573,8 @@ def loopTree(sample, isMC):
             histList['el_dPhiIn_%s' %(reg)].Fill(el_dPhiIn,totWeight)
             histList['pair_mass_%s' %(reg)].Fill(pair_mass,totWeight)
 
+
+            histList['pair_mass_%s' %(combreg)].Fill(pair_mass,totWeight)
 
             histList['mass_sc_%s' %(reg)].Fill(mass_sc,totWeight)
             histList['mass_scraw_%s' %(reg)].Fill(mass_scraw,totWeight)
@@ -738,23 +771,12 @@ def getRatioPlot(histData,histMC, xTitle):
 
 
 dataSamples = {
-#    'runB'   :  tnpSamples.Moriond17_80X['data_Run2016B'].clone(),
-#    'runC'   :  tnpSamples.Moriond17_80X['data_Run2016C'].clone(),
-#    'runD'   :  tnpSamples.Moriond17_80X['data_Run2016D'].clone(),
-#    'runBCD'  :  tnpSamples.Moriond17_80X['data_Run2016B'].clone(),
-#    'runAll'  :  tnpSamples.Remini17_80X['data_Run2016All'].clone(),
-#    'runBCD'  :  tnpSamples.Remini17_80X['data_Run2016B'].clone(),
-    'runA'  :  tnpSamples.Run17['data_Run2017A'].clone(),
-    #'runB'   : tnpSamples.Run17['data_Run2017B_v1'].clone()
-    'runB'   : tnpSamples.Run17['data_Run2017B_all'].clone()
+    'runB'   : tnpSamples.Run17['data_Run2017B'].clone()
 }
 
 mcSamples = {
-    #'runBCD'  : tnpSamples.Moriond17_80X['DY_madgraph'  ].clone(),  
-    #'runAll'  : tnpSamples.Remini17_80X['DY_madgraph'  ].clone(),  
-#    'runBCD'  : tnpSamples.Remini17_80X['DY_madgraph'  ].clone(),  
-    'runA'  : tnpSamples.Run17['DY_madgraph'  ].clone(),  
-    'runB'  : tnpSamples.Run17['DY_madgraphv1'].clone()
+    #'runA'  : tnpSamples.Run17['DY_madgraph'  ].clone(),  
+    'runB'  : tnpSamples.Run17['DY_madgraph'].clone()
 }
 
 #dataSamples['runBCD'].add_sample(tnpSamples.Moriond17_80X['data_Run2016C'])
@@ -773,10 +795,8 @@ mcSamples = {
 
 
 
-#epochs = [ 'runBCD' ]
-#epochs = [ 'runA' ]
 epochs = [ 'runB' ]
-#epochs = [ 'runAll' ]
+
 
 
 for epoch in  epochs:
