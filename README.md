@@ -1,12 +1,16 @@
 # egm_tnp_analysis
 
 ### For MC validation: i.e. comparing several MCs only
+
 > git clone https://github.com/jainshilpi/egm_tnp_analysis/pull/new/onlyMCvalidation -b onlyMCvalidation 
+
 > cd egm_tnp_analysis
+
 no compilation is required (this will auto compile the C++ code automatically) but you need ROOT and RooFit installed.
 
 ## Quick description
 **- Sample definition.**
+
     * Define your samples to be used in etc/samplesDef.py
     
     * samplesDef: these are the main info
