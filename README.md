@@ -8,19 +8,31 @@ no compilation is required (this will auto compile the C++ code automatically) b
 ## Quick description
 **- Sample definition.**
     * Define your samples to be used in etc/samplesDef.py
+    
     * samplesDef: these are the main info
+    
       - for this purpose just define the MCs to be used
      
 **-  Getting the plots **
+
     * Set the MC sample names in tnpEGM_commissioning_onlyMC.py
+    
     * Specify the epochs to run
+    
     * run by doing: python tnpEGM_commissioning_onlyMC.py -b
+    
     * it will give a set of rootfiles with histos in it
+    
     * Second step is to use plot_onlyMC.C with input as the above rootfiles which you got by running tnpEGM_commissioning_onlyMC.py
+    
     * Specify the input rootfiles correctly. 
+    
     * specify if you want to run log or linear
+    
     * do: root -l -b -q plot_onlyMC.C 
+    
     * linear plots will be saved in plotsLinear and log in plotsLog
+    
     * if you already have plotsLinear and plotsLog directory, they can be overwritten. So make sure to save your previous results
     
     
