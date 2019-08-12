@@ -1,5 +1,5 @@
 #include "CMS_lumi.C"
-
+#include <cstdlib>
 
 void xAxisname(string histname, string& xname, string& xunit, string& reg);
 
@@ -24,25 +24,28 @@ void setTCanvasNicev1(TCanvas *can0){
 
 void plot_onlyMC(){
 
-  //bool plotLog = false;
-  bool plotLog = true;
+  bool plotLog = false;
+  //bool plotLog = true;
 
-  bool scaleTo1 = true;
-  //bool scaleTo1 = false;
-
-  bool scaleTodata = true;
-
-  if(scaleTodata)
-    scaleTo1 = false;
-
+   string dirName = "plotsLinear";
+   if(plotLog)
+     dirName = "plotsLog";
+   
+   const int dir_err = system( Form(" mkdir %s",dirName.c_str() ) );
+   if(dir_err == -1){
+     std::cout<<"ERRR!!!! directory "<<dirName<<" could not be created!!! Please check! Plots wont be saved"<<std::endl;
+   }
 
   TFile *f;
 
   const int nfiles = 3;
   string fmcnames[nfiles] = {"histoMC_mc1.root", "histoMC_mc2.root", "histoMC_mc3.root"};
-  string mcTitle[nfiles] = {"2017UL", "2018re-reco", "2021", "2023"};
+  //string mcTitle[nfiles] = {"2017UL", "2018re-reco", "2021", "2023"};
+  string mcTitle[nfiles] = {"2017UL", "2018re-reco", "2021"};
 
-  TFile *fmc;
+  vector<string> varnames;
+  
+  TFile *fmc[nfiles];
   for(int ifile=0; ifile<nfiles; ifile++){
     
     fmc[ifile] = TFile::Open(fmcnames[ifile].c_str());
@@ -70,8 +73,9 @@ void plot_onlyMC(){
 
   
 
-  TH1F hmc[nfiles];
-  int col[nfiles] = {1,8,9,46,2};
+  TH1F *hmc[nfiles];
+  //int col[nfiles] = {1,8,9,46};
+  int col[nfiles] = {1,8,9};
   double tmpMax[nfiles];
   
   for(int ivar=0; ivar<varnames.size(); ivar++){
@@ -80,14 +84,15 @@ void plot_onlyMC(){
         
     for(int ifile=0; ifile<nfiles; ifile++){
       
-      hmc[ifile] = fmc[ifile]->Get(var.c_str());
+      hmc[ifile] = (TH1F*) fmc[ifile]->Get(var.c_str());
       hmc[ifile]->SetLineColor(col[ifile]);
+      hmc[ifile]->SetLineWidth(2);
       hmc[ifile]->Scale(1./hmc[ifile]->Integral());
       tmpMax[ifile] = hmc[ifile]->GetMaximum();
   
     }//for(int ifile=0; ifile<nfiles; ifile++)
 
-    double maxBinC = TMath:MaxElement(nfiles,tmpMax);
+    double maxBinC = TMath::MaxElement(nfiles,tmpMax);
     
     
     int W = 800;
@@ -169,10 +174,12 @@ void plot_onlyMC(){
       hmc[ifile]->SetMinimum(dmin);
       hmc[ifile]->GetXaxis()->SetTitleSize(0.05);  
       hmc[ifile]->GetYaxis()->SetTitleSize(0.05);  
+
+
       
-      hmc[ifile]->GetXaxis()->SetLabelOffset(999);
+      //hmc[ifile]->GetXaxis()->SetLabelOffset(999);
       hmc[ifile]->GetXaxis()->SetLabelSize(0);
-      hmc[ifile]->GetYaxis()->SetTitle(binw);
+
       
       
       
@@ -187,14 +194,14 @@ void plot_onlyMC(){
       hmc[ifile]->GetYaxis()->SetTitleSize(0.05);
       hmc[ifile]->GetYaxis()->SetTitleOffset(1);
       hmc[ifile]->GetYaxis()->SetTitleFont(42);
-      hmc[ifile]->GetZaxis()->SetLabelFont(42);
-      hmc[ifile]->GetZaxis()->SetLabelSize(0.035);
-      hmc[ifile]->GetZaxis()->SetTitleSize(0.035);
-      hmc[ifile]->GetZaxis()->SetTitleFont(42);
       hmc[ifile]->SetTitle("");
 
-      if(ifile==0 )hmc->Draw("LF2BAR");
-      else hmc->Draw("LF2BARsame");
+      hmc[ifile]->GetYaxis()->SetTitle(binw);
+      hmc[ifile]->GetXaxis()->SetTitle(xtitle.c_str());  
+
+
+      if(ifile==0 )hmc[ifile]->Draw("HIST");
+      else hmc[ifile]->Draw("HISTsame");
 
       leg->AddEntry(hmc[ifile], mcTitle[ifile].c_str(),"l");
 
@@ -203,13 +210,10 @@ void plot_onlyMC(){
     leg->Draw();
     c->Update();
 
-   char *filename = new char[100];
-   
-   char dirName[100] = "plots";
-   
-   sprintf(filename,"%s/%s.png",dirName,var.c_str());
+    char *filename = new char[100];   
+   sprintf(filename,"%s/%s.png",dirName.c_str(),var.c_str());
    c->Print(filename);
-   sprintf(filename,"%s/%s.C",dirName,var.c_str());
+   sprintf(filename,"%s/%s.C",dirName.c_str(),var.c_str());
    c->Print(filename);
    
 

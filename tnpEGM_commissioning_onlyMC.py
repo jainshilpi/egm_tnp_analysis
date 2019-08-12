@@ -300,8 +300,8 @@ def loopTree(sample, isMC):
     #fnvtx = rt.TFile("histo_nvtxratio_A.root","READ");
     #hnvtx = fnvtx.Get("hratio");
 
-    for ev in range(tree.GetEntries()):
-#    for ev in range(100):
+    #for ev in range(tree.GetEntries()):
+    for ev in range(2000):
         if (ev % 100000 ==0):
             print 'Processing event: ',ev
         #if (ev >= 100000):
@@ -857,30 +857,33 @@ mcSamples = {
 
 
 epochs = [ 'mc1', 'mc2', 'mc3' ]
-
+#epochs = [ 'mc2', 'mc3' ]
+histMC = {}
+fileoutMC={}
 for epoch in  epochs:
 
     ####loopTree(listOfSamples,isMC)
 
-    histMC,xTitle   = loopTree(mcSamples[epoch],1)
+    histMC[epoch],xTitle   = loopTree(mcSamples[epoch],1)
     
     #nE = len(histData)
 
-    fileoutMC   = rt.TFile("histoMC_%s.root" %(epoch), "RECREATE")
+    fileoutMC[epoch]   = rt.TFile("histoMC_%s.root" %(epoch), "RECREATE")
 
 
 
 #    os.system("mkdir -p plotsLinear"+epoch )
 #    os.system("mkdir -p plotsLog"+epoch )
 
-    fileoutMC.cd()
+    fileoutMC[epoch].cd()
 
-    for key in histMC:
-
+    for key in histMC[epoch]:
+        
         ####save the hists first in a root file which can be used later###
-        histMC[key].Write()
+        print "key is ",key
+        histMC[epoch][key].Write()
 
-    fileoutMC.Write()
+    fileoutMC[epoch].Write()
 
 
 
