@@ -17,7 +17,7 @@ no compilation is required (this will auto compile the C++ code automatically) b
     
       - for this purpose just define the MCs to be used
      
-**-  Getting the plots **
+**-  Getting the plots **: It needs two steps. In (1) step, run tnpEGM_commissioning_onlyMC.py . In (2) step, run plot_onlyMC.C
 
     * Set the MC sample names in tnpEGM_commissioning_onlyMC.py
     
