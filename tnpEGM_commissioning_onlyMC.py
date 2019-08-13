@@ -300,8 +300,8 @@ def loopTree(sample, isMC):
     #fnvtx = rt.TFile("histo_nvtxratio_A.root","READ");
     #hnvtx = fnvtx.Get("hratio");
 
-    #for ev in range(tree.GetEntries()):
-    for ev in range(2000):
+    for ev in range(tree.GetEntries()):
+#    for ev in range(2000):
         if (ev % 100000 ==0):
             print 'Processing event: ',ev
         #if (ev >= 100000):
@@ -850,14 +850,14 @@ def getRatioPlot(histData,histMC, xTitle):
 
 
 mcSamples = {
-    'mc1'   : tnpSamples.Data2017UL['DY_madgraph'].clone(),
-    'mc2'   : tnpSamples.Data2017Rereco['DY_madgraph'].clone(),
-    'mc3'   : tnpSamples.Data2018_102X['DY_madgraph_100X_part012'].clone(),
+    'mc2018'   : tnpSamples.Data2018_rereco['DY_powheg'].clone(),
+    'mc2021'   : tnpSamples.DataRun3['DY_powheg2021'].clone(),
+    'mc2023'   : tnpSamples.DataRun3['DY_powheg2023'].clone(),
+    'mc2024'   : tnpSamples.DataRun3['DY_powheg2024'].clone(),
 }
 
 
-epochs = [ 'mc1', 'mc2', 'mc3' ]
-#epochs = [ 'mc2', 'mc3' ]
+epochs = [ 'mc2018', 'mc2021', 'mc2023', 'mc2024' ]
 histMC = {}
 fileoutMC={}
 for epoch in  epochs:

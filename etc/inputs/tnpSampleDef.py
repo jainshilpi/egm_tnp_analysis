@@ -10,6 +10,10 @@ eos2018Data_102X = '/eos/cms/store/group/phys_egamma/soffi/TnP/ntuples_20180920/
 eos2017DataUL='/eos/cms/store/group/phys_egamma/swmukher/UL/ntuple_2017_UltraLegacy/'
 eos2017DataRereco='/eos/cms/store/group/phys_egamma/swmukher/ntuple_2017_v2/'
 
+###for Run 3 studies
+eos2018Data_rereco = '/eos/cms/store/group/phys_egamma/swmukher/rereco2018/ECAL_NOISE/'
+eosRun3 = '/eos/cms/store/group/phys_egamma/swmukher/Run3_DYtoEE/JamboreeAug19/'
+
 Data2018_102X = {
     ### MiniAOD TnP for IDs scale 
     'DY_madgraph_100X_part012' : tnpSample('DY_madgraph_100X_part012', 
@@ -33,6 +37,7 @@ Data2018_102X = {
     }
 
 
+
 Data2017UL = {
     ### MiniAOD TnP for IDs scale 
     'DY_madgraph' : tnpSample('DY_madgraph', 
@@ -53,6 +58,31 @@ Data2017Rereco = {
 
     'data_RunC' : tnpSample('data_RunC' , eos2017DataRereco + 'RunC.root' , lumi = 6.61),
     'data_RunF' : tnpSample('data_RunF' , eos2017DataRereco + 'RunF.root' , lumi = 6.61),
+    }
+
+
+
+Data2018_rereco = {
+    ### MiniAOD TnP for IDs scale 
+    'DY_powheg' : tnpSample('DY_powheg', 
+                                       eos2018Data_rereco + 'DYToEEpowheg.root',
+                                       isMC = True, nEvts =  -1 )
+    }
+
+
+DataRun3 = {
+    ### MiniAOD TnP for IDs scale 
+    'DY_powheg2021' : tnpSample('DY_powheg2021', 
+                                       eosRun3 + 'DYtoEE_2021_powheg.root',
+                                       isMC = True, nEvts =  -1 ),
+    'DY_powheg2023' : tnpSample('DY_powheg2023', 
+                                       eosRun3 + 'DYtoEE_2023_powheg.root',
+                                       isMC = True, nEvts =  -1 ),
+
+    'DY_powheg2024' : tnpSample('DY_powheg2024', 
+                                       eosRun3 + 'DYtoEE_2024_powheg.root',
+                                       isMC = True, nEvts =  -1 )
+
     }
 
 

@@ -38,10 +38,10 @@ void plot_onlyMC(){
 
   TFile *f;
 
-  const int nfiles = 3;
-  string fmcnames[nfiles] = {"histoMC_mc1.root", "histoMC_mc2.root", "histoMC_mc3.root"};
+  const int nfiles = 4;
+  string fmcnames[nfiles] = {"histoMC_mc2018.root", "histoMC_mc2021.root", "histoMC_mc2023.root", "histoMC_mc2024.root"};
   //string mcTitle[nfiles] = {"2017UL", "2018re-reco", "2021", "2023"};
-  string mcTitle[nfiles] = {"2017UL", "2018re-reco", "2021"};
+  string mcTitle[nfiles] = {"2018re-reco", "2021", "2023", "2024"};
 
   vector<string> varnames;
   
@@ -75,7 +75,7 @@ void plot_onlyMC(){
 
   TH1F *hmc[nfiles];
   //int col[nfiles] = {1,8,9,46};
-  int col[nfiles] = {1,8,9};
+  int col[nfiles] = {1,8,9, 46};
   double tmpMax[nfiles];
   
   for(int ivar=0; ivar<varnames.size(); ivar++){
