@@ -16,7 +16,7 @@
 
 
 import sys
-sys.path.append("..")
+#sys.path.append("..")
 import etc.inputs.tnpSampleDef as tnpSamples
 import libPython.tnpClassUtils as tnpClasses
 import ROOT as rt
@@ -28,8 +28,8 @@ import libPython.CMS_lumi as CMS_lumi
 import libPython.tdrstyle as tdrstyle
 
 
-usephoid = False
-#usephoid = True
+#usephoid = False
+usephoid = True
 
 #treename = 'GsfElectronToSC/fitter_tree'
 #treename = 'GsfElectronToPhoID/fitter_tree'
@@ -57,7 +57,7 @@ def loopTree(sample, isMC):
 		tree.Add(p)
 		friendTreeName='weights_2017_runF'
                 #tree.AddFriend(friendTreeName,"/eos/cms/store/group/phys_egamma/swmukher/ntuple_2017_v2/PU/DY_1j_madgraph_ele.pu.puTree.root")
-                tree.AddFriend(friendTreeName,"/eos/cms/store/group/phys_egamma/swmukher/ntuple_2017_v2/PU/DY_amcatnloext_ele.pu.puTree.root")
+                tree.AddFriend(friendTreeName,"/eos/cms/store/group/phys_egamma/swmukher/ntuple_2017_v2/PU/DY_amcatnloext_pho.pu.puTree.root")
 		print "friendTreeName is ", friendTreeName
 	
 	histList = {}
@@ -380,7 +380,7 @@ def loopTree(sample, isMC):
 		
 		if not usephoid:
 			#el_ecalIso   = tree.el_ecalIso
-			el_ecalIso   = tree.el_dr03EcalRecHitSumEt
+                        el_ecalIso   = tree.el_dr03EcalRecHitSumEt
 			el_eoverp_wES = tree.el_eoverp_wES
 			#passingConvVeto = tree.passingConvVeto
 			el_1overEminus1overP = tree.el_1overEminus1overP
@@ -423,8 +423,8 @@ def loopTree(sample, isMC):
 		###phoID
 		if usephoid:
 			#el_ecalIso   = tree.el_ecalIso
-			el_ecalIso   = tree.el_dr03EcalRecHitSumEt
-			el_r9   = tree.el_r9
+                    #el_ecalIso   = tree.ph_dr03EcalRecHitSumEt
+			el_r9   = tree.ph_r9
 			el_neuIso    = tree.ph_neuIso
 			el_phoIso    = tree.ph_phoIso
 			el_chIso     = tree.ph_chIso
@@ -432,24 +432,24 @@ def loopTree(sample, isMC):
 			el_sieie     = tree.ph_sieie
 			el_et        = tree.ph_et
 			el_sc_eta        = tree.ph_sc_eta
-			el_sc_phi        = tree.ph_sc_phi
 			el_sc_abseta     = tree.ph_sc_eta
-			passingLoose80X     = tree.passingLoose
+			passingLoose80X     = tree.passingLoose94X
 			el_eta         = tree.ph_eta
-			el_phi         = tree.ph_phi
 			el_5x5_sieie   = tree.ph_sieie
 			el_hoe         = tree.ph_hoe
 			el_5x5_r9      = tree.ph_full5x5x_r9
 			el_5x5_sieip   = tree.ph_sieip
-			el_etaW        = tree.ph_etaW
-			el_phiW        = tree.ph_phiW
-			el_sc_esE      = tree.ph_sc_esE
+			#el_etaW        = tree.ph_etaW
+			#el_phiW        = tree.ph_phiW
+			#el_sc_esE      = tree.ph_sc_esE
 			el_sc_e      = tree.ph_sc_energy
-			el_sc_rawE   = tree.ph_sc_rawE
-			el_seed_e    = tree.ph_seed_e
+			#el_sc_rawE   = tree.ph_sc_rawE
+			#el_seed_e    = tree.ph_seed_e
 			sc_pt_p      = el_sc_e/math.cosh(el_sc_eta)
-			scraw_pt_p      = el_sc_rawE/math.cosh(el_sc_eta)
-			seed_pt_p      = el_seed_e/math.cosh(el_sc_eta)
+			#scraw_pt_p      = el_sc_rawE/math.cosh(el_sc_eta)
+                        scraw_pt_p      = el_sc_e/math.cosh(el_sc_eta)
+			#seed_pt_p      = el_seed_e/math.cosh(el_sc_eta)
+                        seed_pt_p      = el_sc_e/math.cosh(el_sc_eta)
 		
 		###tag variables
 		tag_sc_e     = tree.tag_sc_e
@@ -525,15 +525,7 @@ def loopTree(sample, isMC):
 		combinedProbeIso   = (neuphoIso+el_chIso)/el_pt
 		#combinedProbeIso   = el_chIso
 		
-		#print "tag pt : mass : combinedIso ", tag_Ele_pt, " ",pair_mass, " ", combinedTagIso
-		
-		#if not (tag_Ele_pt > 30 and tag_sc_abseta<2.1 and pair_mass>80 and pair_mass<100 and el_sc_abseta<2.5 and el_et>20):
-		#if not (tag_Ele_pt > 30 and tag_sc_abseta<2.1 and pair_mass>60 and pair_mass<120 and el_sc_abseta<2.5 and el_et>20):
-		#if not (tag_Ele_pt > 30 and tag_sc_abseta<2.5 and pair_mass>60 and pair_mass<120 and el_sc_abseta<2.5 and el_et>20):
-		#applying a tighter cut
-		if not (tag_Ele_pt > 40 and tag_sc_abseta<1.4442 and el_et>20 and el_sc_abseta<2.5 and pair_mass>80 and pair_mass<100):
-		#if not (tag_Ele_pt > 40 and tag_sc_abseta<1.4442 and pair_mass>80 and pair_mass<100 and el_sc_abseta<2.5 and el_et>20):
-		#if not (tag_Ele_pt > 40 and tag_sc_abseta<2.1 and pair_mass>80 and pair_mass<100 and el_sc_abseta<2.5 and el_et>20):
+		if not (tag_Ele_pt > 40 and tag_sc_abseta<2.5 and el_et>200 and el_sc_abseta<1.4442 and pair_mass>80 and pair_mass<100):
 			continue
 		
 		
@@ -542,29 +534,20 @@ def loopTree(sample, isMC):
 		
 		
 		if (el_sc_abseta <= 1.479):
-			#if (el_5x5_sieie<0.011100 and math.fabs(el_dEtaIn) < 0.016315 and math.fabs(el_dPhiIn) < 0.252044 and el_hoe < 0.345843 and math.fabs(el_1overEminus1overP) < 0.248070 and (math.fabs(el_dxy))< 0.060279 and math.fabs(el_dz) < 0.800538 and el_mHits<=1):
-			if (el_5x5_sieie<0.0105 and math.fabs(el_dEtaIn) < 0.00387 and math.fabs(el_dPhiIn) < 0.0716 and el_hoe < 0.05  and (math.fabs(el_dxy))< 0.060279 and math.fabs(el_dz) < 0.800538):
-				forIso = 1
+                    #if (el_5x5_sieie<0.0105 and math.fabs(el_dEtaIn) < 0.00387 and math.fabs(el_dPhiIn) < 0.0716 and el_hoe < 0.05  and (math.fabs(el_dxy))< 0.060279 and math.fabs(el_dz) < 0.800538):
+                    if (el_hoe < 0.05):
+                        forIso = 1
 			
-			#forIDetc = combinedProbeIso<5
                         forIDetc = combinedProbeIso<0.1
 		
 		elif (el_sc_abseta > 1.479 and el_sc_abseta < 2.5):
-			#if (el_5x5_sieie < 0.033987 and math.fabs(el_dEtaIn) < 0.010671 and math.fabs(el_dPhiIn) < 0.245263 and el_hoe  < 0.134691 and math.fabs(el_1overEminus1overP) < 0.157160 and math.fabs(el_dxy) < 0.273097 and math.fabs(el_dz) < 0.885860 and el_mHits<=1):
-			#if (el_5x5_sieie < 0.037 and math.fabs(el_dEtaIn) < 0.00868 and math.fabs(el_dPhiIn) < 0.213 and el_hoe  < 0.101 and math.fabs(el_1overEminus1overP) < 0.14):
-			if (el_5x5_sieie < 0.0356 and math.fabs(el_dEtaIn) < 0.0072 and math.fabs(el_dPhiIn) < 0.147 and el_hoe  < 0.0414  and math.fabs(el_dxy) < 0.273 and math.fabs(el_dz) < 0.885860):
-				forIso = 1
-			#forIDetc = combinedProbeIso<5
+                    if (el_5x5_sieie < 0.0356 and math.fabs(el_dEtaIn) < 0.0072 and math.fabs(el_dPhiIn) < 0.147 and el_hoe  < 0.0414  and math.fabs(el_dxy) < 0.273 and math.fabs(el_dz) < 0.885860):
+                        forIso = 1
                         forIDetc = combinedProbeIso<0.1
 		
 		else:
 			#forIDetc = combinedProbeIso<5
                     forIDetc = combinedProbeIso<0.1
-		
-		#if not (tag_Ele_pt > 30 and tag_sc_abseta<2.1 and pair_mass>80 and pair_mass<100 and combinedProbeIso<0.1 and passingLoose80X==1 and el_sc_abseta<2.5 and el_et>20):
-		#continue
-		
-		#print "Selected the event "
 		
 		reg = 'EB'
 		
@@ -587,13 +570,11 @@ def loopTree(sample, isMC):
 		
 		if(forIDetc):
 			histList['el_sc_eta'].Fill(el_sc_eta,totWeight)
-			histList['el_sc_phi'].Fill(el_sc_phi,totWeight)
 			histList['el_eta'].Fill(el_eta,totWeight)
 			histList['el_phi'].Fill(el_phi,totWeight)
 			histList['event_nPV'].Fill(event_nPV)
 			histList['event_nPV_wei'].Fill(event_nPV,totWeight)
 			histList['event_rho'].Fill(event_rho,totWeight)
-			histList['el_sc_phi_%s' %(reg)].Fill(el_sc_phi,totWeight)
 			histList['tag_sc_phi'].Fill(tag_Ele_sc_phi,totWeight)
 			histList['tag_sc_phi_%s' %(reg)].Fill(tag_Ele_sc_phi,totWeight)
 			histList['el_et_%s' %(reg)].Fill(el_et,totWeight)
@@ -601,47 +582,22 @@ def loopTree(sample, isMC):
 			histList['el_r9_%s' %(reg)].Fill(el_r9,totWeight)
 			histList['el_r9_upto1_%s' %(reg)].Fill(el_r9,totWeight)
 
-			histList['el_dEtaIn_%s' %(reg)].Fill(el_dEtaIn,totWeight)
-			histList['el_dPhiIn_%s' %(reg)].Fill(el_dPhiIn,totWeight)
 			histList['pair_mass_%s' %(reg)].Fill(pair_mass,totWeight)
 			histList['pair_mass_%s' %(combreg)].Fill(pair_mass,totWeight)
 			histList['mass_sc_%s' %(reg)].Fill(mass_sc,totWeight)
 			histList['el_hoe_%s' %(reg)].Fill(el_hoe,totWeight)
                         
-			#if(el_sc_e>55):
-                        #    histList['el_hoe_SCgt55_%s' %(reg)].Fill(el_hoe,totWeight)
-
-			histList['el_eoverp_wES_%s' %(reg)].Fill(el_eoverp_wES,totWeight)
-			histList['el_mHits_%s' %(reg)].Fill(el_mHits,totWeight)
-			histList['el_5x5_r9_%s' %(reg)].Fill(el_5x5_r9,totWeight)
+                        histList['el_5x5_r9_%s' %(reg)].Fill(el_5x5_r9,totWeight)
 
 			histList['el_5x5_r9_upto1_%s' %(reg)].Fill(el_5x5_r9,totWeight)
 
-			histList['el_etaW_%s' %(reg)].Fill(el_etaW,totWeight)
-			histList['el_phiW_%s' %(reg)].Fill(el_phiW,totWeight)
-			histList['el_fbrem_%s' %(reg)].Fill(el_fbrem,totWeight)
-			histList['el_chisq_%s' %(reg)].Fill(el_chisq,totWeight)
-			histList['el_dxy_%s' %(reg)].Fill(el_dxy,totWeight)
-			histList['el_dz_%s' %(reg)].Fill(el_dz,totWeight)
-			histList['el_nonTrigMVA80X_%s' %(reg)].Fill(el_nonTrigMVA80X,totWeight)
-			histList['el_5x5_sieie_%s' %(reg)].Fill(el_5x5_sieie,totWeight)
+                        histList['el_5x5_sieie_%s' %(reg)].Fill(el_5x5_sieie,totWeight)
 			histList['el_sc_e_%s' %(reg)].Fill(el_sc_e,totWeight)
 			histList['el_sc_rawE_%s' %(reg)].Fill(el_sc_rawE,totWeight)
 			
 			
-			if(el_sc_abseta > 1.479):
-				histList['el_sc_esE_%s' %(reg)].Fill(el_sc_esE,totWeight)
 			
-			if (event_nPV < 20):
-				histList['el_hoe_nPU000to020_%s' %(reg)].Fill(el_hoe,totWeight)
-			if (event_nPV > 20) and (event_nPV < 30):
-				histList['el_hoe_nPU020to030_%s' %(reg)].Fill(el_hoe,totWeight)
-			if (event_nPV > 30):
-				histList['el_hoe_nPU030toInf_%s' %(reg)].Fill(el_hoe,totWeight)
-		
-		
 		if(forIso):
-			histList['el_ecalIso_%s' %(reg)].Fill(el_ecalIso,totWeight)
 			histList['el_phoIso_%s' %(reg)].Fill(el_phoIso,totWeight)
 			histList['el_chIso_%s' %(reg)].Fill(el_chIso,totWeight)
 			histList['el_neuIso_%s' %(reg)].Fill(el_neuIso,totWeight)
