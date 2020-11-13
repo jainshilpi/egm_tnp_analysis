@@ -17,7 +17,7 @@
 
 import sys
 sys.path.append("..")
-import etc.inputs.tnpSampleDef_comULRC as tnpSamples
+import etc.inputs.tnpSampleDef as tnpSamples
 import libPython.tnpClassUtils as tnpClasses
 import ROOT as rt
 from ROOT import gStyle
